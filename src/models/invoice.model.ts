@@ -8,7 +8,7 @@ const Invoice = sequelize.define(
   {
     invoiceNumber: {
       type: DataTypes.STRING(20),
-      allowNull: false,
+      allowNull: false,  
       primaryKey: true,
     },
 
