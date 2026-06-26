@@ -11,7 +11,7 @@ async function createInvoice(invoiceData: InvoiceData) {
     // if duplicate throw error
 
     if(existingInvoice){
-        throw new Error("Invoice already exsits");
+        throw new Error("Invoice already exists");
     }
 
     // create invoice 
@@ -21,4 +21,54 @@ async function createInvoice(invoiceData: InvoiceData) {
 
     return newInvoice;
 }
-export{createInvoice};
+
+//get invoices
+
+async function getAllInvoice(){
+    //Fetch all invoices from the database
+
+    const invoices = await Invoice.findAll();
+
+    return invoices;
+}
+
+async function getInvoiceByNumber(invoiceNumber : string){
+    const invoice = await Invoice.findOne({
+        where:{
+            invoiceNumber : invoiceNumber,
+        },
+    });
+
+    if(!invoice){
+        throw new Error("Invoice not found");
+    }
+    return invoice
+}
+
+async function updateInvoice(invoiceNumber:string , invoiceData:Partial<InvoiceData>){
+        const invoice = await Invoice.findOne({
+        where: {
+            invoiceNumber,
+        },
+    });
+
+    // If invoice doesn't exist
+    if (!invoice) {
+        throw new Error("Invoice not found");
+    }
+
+    // Update invoice
+    await invoice.update(invoiceData);
+
+    // Return updated invoice
+    return invoice;
+}
+
+
+export{
+    createInvoice,
+    getAllInvoice,
+    getInvoiceByNumber,
+    updateInvoice
+
+};

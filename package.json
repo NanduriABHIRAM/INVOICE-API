@@ -1,10 +1,23 @@
 {
+  "name": "invoice-api",
+  "version": "1.0.0",
+  "description": "Invoice REST API using Express, TypeScript, Sequelize and MySQL",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
   "dependencies": {
     "express": "^5.2.1",
     "mysql2": "^3.22.5",
     "sequelize": "^6.37.8"
   },
   "devDependencies": {
-    "@types/express": "^5.0.6"
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.13.2",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.2"
   }
 }
