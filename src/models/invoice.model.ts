@@ -48,7 +48,7 @@ const Invoice = sequelize.define(
     },
 
     discount: {
-      type: DataTypes.DECIMAL(5, 2),
+      type: DataTypes.DECIMAL(15, 2),
       allowNull: true,
       defaultValue: 0,
     },
