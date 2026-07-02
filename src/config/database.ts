@@ -1,12 +1,13 @@
 import { Sequelize } from "sequelize";
+import config from "./config";
 
 const sequelize = new Sequelize(
-  "invoice_db",
-  "invoice_user",
-  "Invoice@123",
+  config.database.name,
+  config.database.user,
+  config.database.password,
   {
-    host: "localhost",
-    dialect: "mysql",
+    host: config.database.host,
+    dialect: config.database.dialect,
     logging: false,
   }
 );

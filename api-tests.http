@@ -1,0 +1,91 @@
+@baseUrl = http://localhost:8080
+@invoiceNumber = INV-TEST-001
+
+### Health check
+GET {{baseUrl}}/health
+
+### Create invoice
+POST {{baseUrl}}/v1/vendor-payable/invoice/create
+Content-Type: application/json
+
+{
+  "invoiceNumber": "{{invoiceNumber}}",
+  "invoiceDate": "2026-07-02",
+  "vendorName": "Test Vendor",
+  "gstin": "29ABCDE1234F1Z5",
+  "baseAmount": 10000,
+  "dueDate": "2026-07-15",
+  "expenseType": "Software",
+  "vendorType": "Registered",
+  "discount": 500,
+  "subTotal": 9500,
+  "accountNumber": "12345678901",
+  "gst": 18,
+  "ifsc": "HDFC0001234",
+  "invoiceAmount": 11210,
+  "paymentFrequency": "Immediate",
+  "tds": 10,
+  "scheduledDate": "2026-07-10",
+  "paymentAmount": 10210,
+  "paidAmount": 0,
+  "dueAmount": 10210,
+  "description": "API test invoice",
+  "paymentTerms": "Net 15",
+  "amountToVendor": 9210
+}
+
+### Get all invoices
+GET {{baseUrl}}/v1/vendor-payable/invoice/getAllInvoice
+
+### Get invoice by number
+GET {{baseUrl}}/v1/vendor-payable/invoice/{{invoiceNumber}}
+
+### Update invoice
+PUT {{baseUrl}}/v1/vendor-payable/invoice/{{invoiceNumber}}
+Content-Type: application/json
+
+{
+  "vendorName": "Updated Test Vendor",
+  "paidAmount": 2500,
+  "dueAmount": 7710,
+  "description": "Updated through API test"
+}
+
+### Duplicate invoice check - should return 409 after create succeeds once
+POST {{baseUrl}}/v1/vendor-payable/invoice/create
+Content-Type: application/json
+
+{
+  "invoiceNumber": "{{invoiceNumber}}",
+  "invoiceDate": "2026-07-02",
+  "vendorName": "Test Vendor",
+  "gstin": "29ABCDE1234F1Z5",
+  "baseAmount": 10000,
+  "dueDate": "2026-07-15",
+  "expenseType": "Software",
+  "vendorType": "Registered",
+  "discount": 500,
+  "subTotal": 9500,
+  "accountNumber": "12345678901",
+  "gst": 18,
+  "ifsc": "HDFC0001234",
+  "invoiceAmount": 11210,
+  "paymentFrequency": "Immediate",
+  "tds": 10,
+  "scheduledDate": "2026-07-10",
+  "paymentAmount": 10210,
+  "paidAmount": 0,
+  "dueAmount": 10210,
+  "description": "Duplicate test invoice",
+  "paymentTerms": "Net 15",
+  "amountToVendor": 9210
+}
+
+### Get all settlements
+GET {{baseUrl}}/v1/vendor-payable/settlement
+
+### Get settlements with filters
+GET {{baseUrl}}/v1/vendor-payable/settlement?invoiceId={{invoiceNumber}}&paymentStatus=SUCCESS&payment_gateway=razorpay
+
+### Get settlement by invoice id
+GET {{baseUrl}}/v1/vendor-payable/settlement/{{invoiceNumber}}
