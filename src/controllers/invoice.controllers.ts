@@ -20,9 +20,6 @@ export const createInvoiceController = async (
         });
 
     } catch (error: any) {
-        console.error(error);
-
-        // Duplicate invoice
         if (error.message === "Invoice already exists") {
             return res.status(409).json({
                 success: false,
@@ -30,7 +27,6 @@ export const createInvoiceController = async (
             });
         }
 
-        // Unexpected error
         return res.status(500).json({
             success: false,
             message: error.message,
@@ -58,7 +54,7 @@ export const getAllInvoiceController = async (
                 message : error.message,
             });
         }
-    
+
 };
 
 export const getInvoiceByNumberController = async (
@@ -117,5 +113,3 @@ export const updateInvoiceController = async (
         });
     }
 };
-
-  

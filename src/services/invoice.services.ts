@@ -1,20 +1,53 @@
+import { WhereOptions } from "sequelize";
 import { InvoiceData } from "../interfaces/invoice.interfaces";
+import { InvoiceFilters } from "../interfaces/NLQ.interfaces";
 import Invoice from "../models/invoice.model";
+
+function buildInvoiceFilters(filters: InvoiceFilters = {}) {
+    const where: WhereOptions = {};
+
+    if (filters.invoiceNumber) {
+        where.invoiceNumber = filters.invoiceNumber;
+    }
+
+    if (filters.vendorName) {
+        where.vendorName = filters.vendorName;
+    }
+
+    if (filters.invoiceDate) {
+        where.invoiceDate = filters.invoiceDate;
+    }
+
+    if (filters.dueDate) {
+        where.dueDate = filters.dueDate;
+    }
+
+    if (filters.paymentFrequency) {
+        where.paymentFrequency = filters.paymentFrequency;
+    }
+
+    if (filters.vendorType) {
+        where.vendorType = filters.vendorType;
+    }
+
+    if (filters.expenseType) {
+        where.expenseType = filters.expenseType;
+    }
+
+    return where;
+}
+
 async function createInvoice(invoiceData: InvoiceData) {
-    // checking if invoice exists
     const existingInvoice = await Invoice.findOne({
-        where:{
+        where: {
             invoiceNumber: invoiceData.invoiceNumber,
         },
     });
 
-    // if duplicate throw error
-
-    if(existingInvoice){
+    if (existingInvoice) {
         throw new Error("Invoice already exists");
     }
 
-    // create invoice 
     const newInvoice = await Invoice.create({
         ...invoiceData,
     });
@@ -22,53 +55,52 @@ async function createInvoice(invoiceData: InvoiceData) {
     return newInvoice;
 }
 
-//get invoices
-
-async function getAllInvoice(){
-    //Fetch all invoices from the database
-
-    const invoices = await Invoice.findAll();
+async function getAllInvoice(filters?: InvoiceFilters) {
+    const invoices = await Invoice.findAll({
+        where: buildInvoiceFilters(filters),
+        order: [["createdAt", "DESC"]],
+    });
 
     return invoices;
 }
 
-async function getInvoiceByNumber(invoiceNumber : string){
+async function getInvoiceByNumber(invoiceNumber: string) {
     const invoice = await Invoice.findOne({
-        where:{
-            invoiceNumber : invoiceNumber,
-        },
-    });
-
-    if(!invoice){
-        throw new Error("Invoice not found");
-    }
-    return invoice
-}
-
-async function updateInvoice(invoiceNumber:string , invoiceData:Partial<InvoiceData>){
-        const invoice = await Invoice.findOne({
         where: {
             invoiceNumber,
         },
     });
 
-    // If invoice doesn't exist
     if (!invoice) {
         throw new Error("Invoice not found");
     }
 
-    // Update invoice
+    return invoice;
+}
+
+async function updateInvoice(
+    invoiceNumber: string,
+    invoiceData: Partial<InvoiceData>,
+) {
+    const invoice = await Invoice.findOne({
+        where: {
+            invoiceNumber,
+        },
+    });
+
+    if (!invoice) {
+        throw new Error("Invoice not found");
+    }
+
     await invoice.update(invoiceData);
 
-    // Return updated invoice
     return invoice;
 }
 
 
-export{
+export {
     createInvoice,
     getAllInvoice,
     getInvoiceByNumber,
-    updateInvoice
-
+    updateInvoice,
 };

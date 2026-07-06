@@ -18,6 +18,10 @@ const parsePort = (value: string | undefined, fallback: number) => {
 
 const config = {
   port: parsePort(process.env.PORT, 8080),
+  nlq: {
+    apiUrl: process.env.NLQ_API_URL || "http://localhost:11434/api/chat",
+    model: process.env.NLQ_MODEL || "qwen3:latest",
+  },
   database: {
     name: process.env.DB_NAME || "invoice_db",
     user: process.env.DB_USER || "invoice_user",

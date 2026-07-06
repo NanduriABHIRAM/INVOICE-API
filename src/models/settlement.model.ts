@@ -1,5 +1,3 @@
-// models/settlement.model.ts
-
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database";
 
